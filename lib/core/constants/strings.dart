@@ -32,6 +32,7 @@ sealed class AppStrings {
     'Delicious'
   ];
 
+
   static const String gitUrl = "https://twitter.com/yummsaruche";
   static const String linkedUrl = "https://instagram.com/yummsaruche";
   static const String nibblesUrl = "https://facebook.com/yummsaruche";
