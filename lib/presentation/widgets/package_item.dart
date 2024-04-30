@@ -62,7 +62,7 @@ class PackageItem extends StatelessWidget {
                           ),
                           Space.yf(.6),
                           Text(
-                            packageModel.price.toUpperCase(),
+                            packageModel.formattedPrice.toUpperCase(),
                             style: AppText.h3,
                           ),
                           Space.yf(.6),
@@ -77,7 +77,7 @@ class PackageItem extends StatelessWidget {
                               ),
                               Space.xf(.3),
                               Text(
-                                packageModel.oldPrice.toUpperCase(),
+                                packageModel.formattedPrice.toUpperCase(),
                                 style: AppText.h3?.copyWith(
                                     color: AppColors.antiqueRuby,
                                     decoration: TextDecoration.lineThrough,

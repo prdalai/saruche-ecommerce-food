@@ -27,7 +27,7 @@ Widget whiteLogoSvg() {
 
 Widget positionedWhiteLogo() {
   return Positioned(
-    top: AppDimensions.normalize(20),
+    top: AppDimensions.normalize(3),
     left: 0,
     right: 0,
     child: whiteLogoSvg(),

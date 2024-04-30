@@ -5,6 +5,10 @@ class Product extends Equatable {
   final String id;
   final String name;
   final String price;
+  String get formattedPrice {
+    String formattedPrice = price.replaceAll("KWD", "INR");
+    return formattedPrice;
+  }
 
   const Product({
     required this.id,

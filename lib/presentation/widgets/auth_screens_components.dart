@@ -9,28 +9,12 @@ import '../../core/constants/colors.dart';
 Widget authTopColumn(bool isFromSignUp) {
   return Column(
     children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          customUnderLinedText(
-            AppText.b2?.copyWith(
-              decoration: TextDecoration.underline,
-              decorationThickness: 3.5,
-            ),
-            "Continue as\na guest",
-            true,
-          ),
-          Space.xf()
-        ],
-      ),
-      Space.yf(2.5),
       SvgPicture.asset(
         AppAssets.logoRuby,
         width: AppDimensions.normalize(65),
         colorFilter:
             const ColorFilter.mode(AppColors.antiqueRuby, BlendMode.srcIn),
       ),
-      Space.yf(3),
       Text(
         isFromSignUp ? "SIGN UP" : "SIGN IN",
         style: AppText.h2b,

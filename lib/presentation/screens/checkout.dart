@@ -11,6 +11,8 @@ import 'package:nibbles_ecommerce/models/package.dart';
 
 import 'dart:math' as math;
 
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen(
@@ -24,6 +26,39 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
+  late Razorpay _razorpay;
+
+  @override
+  void initState() {
+    super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _razorpay.clear();
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    // Handle payment success
+    Navigator.of(context).pushNamed(
+        AppRouter.successfulOrder,
+        arguments: widget.packageModel.name);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Handle payment failure
+    print("Payment Error: ${response.message}");
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Handle external wallet payment
+    print("External Wallet: ${response.walletName}");
+  }
   DateTime selectedDate = DateTime.now();
   bool dateChosen = false;
   final TextEditingController controller = TextEditingController();
@@ -102,7 +137,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         widget.packageModel.name.toUpperCase(),
                                         style: AppText.h2,
                                       ),
-                                      Text(widget.packageModel.price
+                                      Text(widget.packageModel.formattedPrice
                                           .toUpperCase()),
                                       Space.yf(.4),
                                       Row(
@@ -187,41 +222,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                left: AppDimensions.normalize(10),
-                top: AppDimensions.normalize(7),
-                bottom: AppDimensions.normalize(5),
-              ),
-              child: Text(
-                "Things you may like to add".toUpperCase(),
-                style: AppText.h3,
-              ),
-            ),
-            BlocBuilder<ProductsBloc, ProductsState>(
-              builder: (context, state) {
-                if (state is ProductsLoaded && state.products.isNotEmpty) {
-                  return SizedBox(
-                    height: AppDimensions.normalize(80),
-                    child: ListView.separated(
-                      itemCount: state.products.length,
-                      scrollDirection: Axis.horizontal,
-                      padding: Space.hf(1.5),
-                      itemBuilder: (context, index) {
-                        return productItem(state.products[index]);
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return Space.xf();
-                      },
-                    ),
-                  );
-                } else {
-                  return const Center(
-                    child: LoadingTicker(text: AppStrings.loading),
-                  );
-                }
-              },
-            ),
             Space.yf(1.3),
             couponContainer(controller),
             Space.yf(1.3),
@@ -243,39 +243,58 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             Space.yf(),
             BlocBuilder<SelectKidCubit, SelectKidState>(
               builder: (context, kidState) {
-                return Padding(
-                  padding: Space.all(1.3, 1),
-                  child: BlocBuilder<PlaceOrderCubit, PlaceOrderState>(
-                    builder: (context, orderState) {
-                      return customElevatedButton(
-                          onTap: () {
-                            OrderModel order = OrderModel(
-                                addressTitle: widget.addressTitle,
-                                date: selectedDate,
-                                kidName: kidState.selectedKid?.name ?? "",
-                                packageName: widget.packageModel.name,
-                                totalPrice: widget.packageModel.price);
-                            context.read<PlaceOrderCubit>().placeOrder(order);
-                            //  if (orderState is OrderPlacedSuccessfully) {
-                            Navigator.of(context).pushNamed(
-                                AppRouter.successfulOrder,
-                                arguments: widget.packageModel.name);
-                            //  }
-                          },
-                          text: (orderState is PlaceOrderLoading)
-                              ? AppStrings.wait
-                              : "Place An Order".toUpperCase(),
-                          heightFraction: 20,
-                          width: double.infinity,
-                          color: AppColors.commonAmber);
-                    },
-                  ),
+                return BlocBuilder<PlaceOrderCubit, PlaceOrderState>(
+                  builder: (context, orderState) {
+                    return SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          startRazorpayPayment();
+                        },
+                        child: Text(
+                          (orderState is PlaceOrderLoading) ? AppStrings.wait : "Pay",style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    );
+
+                  },
                 );
               },
             ),
+            Space.yf(2.2),
           ],
         ),
       ),
     );
   }
+  void startRazorpayPayment() {
+    // Extract the numeric part from formattedPrice
+    String numericPrice = widget.packageModel.formattedPrice.replaceAll(RegExp(r'[^0-9.]'), '');
+
+    // Convert numericPrice to a double
+    double price = double.tryParse(numericPrice) ?? 0.0;
+
+    // Convert the price to paise
+    int amountInPaise = (price * 100/1000).toInt();
+
+    var options = {
+      'key': 'rzp_test_nINexP3HZA1XP7', // Replace with your actual Razorpay API key
+      'amount': amountInPaise, // Amount in paise
+      'name': widget.packageModel.name,
+      'description': 'Test Payment',
+      'prefill': {'contact': '1234567890', 'email': 'test@example.com'},
+      'external': {
+        'wallets': ['paytm']
+      }
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+
 }
+

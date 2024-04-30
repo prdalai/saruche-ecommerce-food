@@ -9,9 +9,6 @@ import 'core/core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // it won't work for some emulators.
-  // change emulators or use physical device.
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
   Bloc.observer = NibblesBlocObserver();

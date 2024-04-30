@@ -18,41 +18,43 @@ Widget productItem(Product product) {
     decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppDimensions.normalize(4))),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          height: AppDimensions.normalize(35),
-          width: double.infinity,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppDimensions.normalize(5)),
-              image: DecorationImage(
-                  image: AssetImage(AppAssets.productsPng[random.nextInt(3)]),
-                  fit: BoxFit.none)),
-        ),
-        Space.yf(.4),
-        Text(
-          product.name.capitalize(),
-          style: AppText.h3b,
-        ),
-        Text(
-          product.price,
-          style: AppText.b1,
-        ),
-        Space.yf(.5),
-        Padding(
-          padding: Space.hf(.5),
-          child: customElevatedButton(
-              onTap: () {},
-              text: "Add Product",
-              heightFraction: 12,
-              width: double.infinity,
-              color: AppColors.commonAmber,
-              withSmallText: true,
-              radiusFraction: 2.5),
-        )
-      ],
+    child: SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            height: AppDimensions.normalize(35),
+            width: double.infinity,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(AppDimensions.normalize(5)),
+                image: DecorationImage(
+                    image: AssetImage(AppAssets.productsPng[random.nextInt(3)]),
+                    fit: BoxFit.none)),
+          ),
+          Space.yf(.4),
+          Text(
+            product.name.capitalize(),
+            style: AppText.h3b,
+          ),
+          Text(
+            product.formattedPrice,
+            style: AppText.b1,
+          ),
+          Space.yf(.5),
+          Padding(
+            padding: Space.hf(.5),
+            child: customElevatedButton(
+                onTap: () {},
+                text: "Add Product",
+                heightFraction: 12,
+                width: double.infinity,
+                color: AppColors.commonAmber,
+                withSmallText: true,
+                radiusFraction: 2.5),
+          )
+        ],
+      ),
     ),
   );
 }
@@ -116,10 +118,10 @@ Widget pricesContainer(PackageModel packageModel) {
         borderRadius: BorderRadius.circular(AppDimensions.normalize(9))),
     child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       priceRow(
-          "Package Total", "${packageModel.price.substring(0, 3)}.000 KWD"),
-      priceRow("Add ons", "0.000 KWD"),
-      priceRow("Promo Discount", "0.000 KWD"),
-      priceRow("Grand total", "${packageModel.price.substring(0, 3)}.000 KWD"),
+          "Package Total", "${packageModel.price.substring(0, 3)}.000 INR"),
+      priceRow("Add ons", "0.000 INR"),
+      priceRow("Promo Discount", "0.000 INR"),
+      priceRow("Grand total", "${packageModel.price.substring(0, 3)}.000 INR"),
     ]),
   );
 }

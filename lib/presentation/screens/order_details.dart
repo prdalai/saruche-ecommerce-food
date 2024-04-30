@@ -67,7 +67,7 @@ class OrderDetailsScreen extends StatelessWidget {
                                     ),
                                     Space.yf(.2),
                                     Text(
-                                      "PRICE: ${orderModel.totalPrice.toUpperCase().substring(0, 3)} KWD",
+                                      "PRICE: ${orderModel.totalPrice.toUpperCase().substring(0, 3)} INR",
                                       style: AppText.b1b
                                           ?.copyWith(color: AppColors.deepTeal),
                                     ),

@@ -7,7 +7,10 @@ class PackageModel extends Equatable {
   final String items;
   final String price;
   final String oldPrice;
-
+  String get formattedPrice {
+    String formattedPrice = price.replaceAll("KWD", "INR");
+    return formattedPrice;
+  }
   const PackageModel({
     required this.id,
     required this.name,

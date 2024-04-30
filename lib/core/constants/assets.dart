@@ -195,6 +195,5 @@ sealed class AppAssets {
   static const List<String> paymentPng = [
     visaPng,
     mastercardPng,
-    knetPng,
   ];
 }

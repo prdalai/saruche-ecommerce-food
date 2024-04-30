@@ -31,7 +31,7 @@ class MoreScreen extends StatelessWidget {
                   Positioned(
                     left: 0,
                     right: 0,
-                    top: AppDimensions.normalize(25),
+                    top: AppDimensions.normalize(3),
                     child: SvgPicture.asset(
                       AppAssets.nibblesLogo,
                       colorFilter:

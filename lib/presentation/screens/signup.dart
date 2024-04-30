@@ -110,10 +110,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       Space.xf(),
                       Text(
-                        "I accept all privacy policies and terms&\nConditions of Nibbles.",
+                        "I accept all privacy policies and terms&\nConditions of Saruche.",
                         style: AppText.b1
                             ?.copyWith(color: AppColors.greyText, height: 1.5),
-                      ).withDifferentStyle("Nibbles",
+                      ).withDifferentStyle("Saruche",
                           AppText.h3b!.copyWith(color: AppColors.antiqueRuby))
                     ],
                   ),
